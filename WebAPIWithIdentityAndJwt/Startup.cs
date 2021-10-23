@@ -29,6 +29,8 @@ namespace WebAPIWithIdentityAndJwt
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IUserService, UserService>();
+
             services.AddAuthentication(x=> {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -43,10 +45,9 @@ namespace WebAPIWithIdentityAndJwt
                     ValidAudience = Configuration.GetSection("Jwt")["Issuer"],
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetSection("Jwt")["Key"]))
-
                 };
-            
             });
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
